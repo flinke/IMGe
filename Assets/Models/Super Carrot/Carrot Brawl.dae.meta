@@ -1,0 +1,152 @@
+fileFormatVersion: 2
+guid: 2b5b10cda400225439748f915202999d
+timeCreated: 1484060213
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Body
+    100002: //RootNode
+    100004: Center
+    100006: Eye
+    100008: Leaf1L
+    100010: Leaf1R
+    100012: Leaf2L
+    100014: Leaf2R
+    100016: Leaf3L
+    100018: Leaf3R
+    100020: LeafL1a
+    100022: LeafL1b
+    100024: LeafL1c
+    100026: LeafL2a
+    100028: LeafL2b
+    100030: LeafL2c
+    100032: LeafL3a
+    100034: LeafL3b
+    100036: LeafL3c
+    100038: LeafR1a
+    100040: LeafR1b
+    100042: LeafR1c
+    100044: LeafR2a
+    100046: LeafR2b
+    100048: LeafR2c
+    100050: LeafR3a
+    100052: LeafR3b
+    100054: LeafR3c
+    100056: Leaves
+    100058: Root
+    400000: Body
+    400002: //RootNode
+    400004: Center
+    400006: Eye
+    400008: Leaf1L
+    400010: Leaf1R
+    400012: Leaf2L
+    400014: Leaf2R
+    400016: Leaf3L
+    400018: Leaf3R
+    400020: LeafL1a
+    400022: LeafL1b
+    400024: LeafL1c
+    400026: LeafL2a
+    400028: LeafL2b
+    400030: LeafL2c
+    400032: LeafL3a
+    400034: LeafL3b
+    400036: LeafL3c
+    400038: LeafR1a
+    400040: LeafR1b
+    400042: LeafR1c
+    400044: LeafR2a
+    400046: LeafR2b
+    400048: LeafR2c
+    400050: LeafR3a
+    400052: LeafR3b
+    400054: LeafR3c
+    400056: Leaves
+    400058: Root
+    4300000: Leaf1L
+    4300002: Leaf2L
+    4300004: Leaf3L
+    4300006: Leaf1R
+    4300008: Leaf2R
+    4300010: Leaf3R
+    4300012: Body
+    4300014: Eye
+    9500000: //RootNode
+    13700000: Body
+    13700002: Eye
+    13700004: Leaf1L
+    13700006: Leaf1R
+    13700008: Leaf2L
+    13700010: Leaf2R
+    13700012: Leaf3L
+    13700014: Leaf3R
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
