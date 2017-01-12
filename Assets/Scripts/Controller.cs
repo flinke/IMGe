@@ -4,45 +4,55 @@ using System;
 using System.Collections;
 
 public class Controller : MonoBehaviour {
-
-    SerialPort stream = new SerialPort("COM3", 115200);
+    SerialPort _stream = new SerialPort("COM8", 115200);
     private string receivedData = "EMPTY";
-    private string[] sliders;
+    private string[] sliders = new string[5] { "test", "t", "tes", "ass", "df" };
     private string[] accelerometer;
-    public float[] sliderVals;
-    public float accelValsX;
-    public float accelValsY;
-    public float accelValsZ;
-    public float alcoholLevel;
+    private float[] sliderVals = new float[5] {1.0f,0f,0f,0f,0f};
+    private float accelValsX;
+    private float accelValsY;
+    private float accelValsZ;
+    private float alcoholLevel;
 
     void Start() {
-        stream.Open();
+        _stream.Open();
         Debug.Log("Serial port opened");
+        //StartCoroutine(blinkLED(4,10,31));
+        setMultipleLED("0000");
     }
 
-    public void getSlider() {
-        stream.Write("4");
-        receivedData = stream.ReadLine();
+    void Update() {
+        //setMultipleLED("0000");
+    }
+
+    //get the slide/rotate values
+    public float[]getSlider() {
+        _stream.Write("4");
+        receivedData = _stream.ReadLine();
         sliders = receivedData.Split(' ');
-        sliderVals[1] = Convert.ToInt32(sliders[1], 16);
-        sliderVals[2] = Convert.ToInt32(sliders[2], 16);
-        sliderVals[3] = Convert.ToInt32(sliders[3], 16);
-        sliderVals[4] = Convert.ToInt32(sliders[4], 16);
+        sliderVals[0] = (float)Convert.ToInt32(sliders[1], 16) / 4096;
+        sliderVals[1] = (float)Convert.ToInt32(sliders[2], 16) / 4096;
+        sliderVals[2] = (float)Convert.ToInt32(sliders[3], 16) / 4096;
+        sliderVals[3] = (float)Convert.ToInt32(sliders[4], 16) / 4096;
+        return sliderVals;
     }
 
-    public void getAlcoholLevel() {
-        stream.Write("s");
-        receivedData = stream.ReadLine();
+    //get the blow-value
+    public float getAlcoholLevel() {
+        _stream.Write("s");
+        receivedData = _stream.ReadLine();
         alcoholLevel = float.Parse( receivedData.Split(' ')[1], System.Globalization.CultureInfo.InvariantCulture);
+        return alcoholLevel;
     }
 
+    //maybe change to array
     public void getAccel() {
-        stream.Write("a");
-        receivedData = stream.ReadLine();
+        _stream.Write("a");
+        receivedData = _stream.ReadLine();
         accelerometer = receivedData.Split(' ');
         accelValsX = (float)Convert.ToInt32(accelerometer[1], 16) / 128;
         accelValsY = (float)Convert.ToInt32(accelerometer[2], 16) / 128;
-        accelValsZ = (float)Convert.ToInt32(accelerometer[3], 16) / 127;
+        accelValsZ = (float)Convert.ToInt32(accelerometer[3], 16) / 128;
         if (accelValsX > 1.0f)
             accelValsX -= 2.0f;
         if (accelValsY > 1.0f)
@@ -51,54 +61,61 @@ public class Controller : MonoBehaviour {
             accelValsZ -= 2.0f;
     }
 
+    //check if a button (1-6) is pressed 
     public bool isPressed(int button) {
         int receivedData;
-        stream.Write("1");
-        receivedData = Convert.ToInt32(stream.ReadLine(), 16);
+        _stream.Write("1");
+        receivedData = Convert.ToInt32(_stream.ReadLine(), 16);
 
         int bitmask = 1 << (5 + button);
         receivedData &= bitmask;
         return receivedData != 0;
     }
 
+    //set the LED (0-3) to off (0), on (1) or switch (2)
     public void setLED(int id, int status) {
-        stream.Write("l " + id + " " + status + "\r\n");
-        receivedData = stream.ReadLine();
+        _stream.Write("l " + id + " " + status + "\r\n");
+        receivedData = _stream.ReadLine();
     }
 
+    //set up a "Level"
     public void setMetreLED(int number) {
         for (int i = 3; i > 3 - number; i--) {
-            stream.Write("l " + i + " 1\r\n");
-            receivedData = stream.ReadLine();
+            _stream.Write("l " + i + " 1\r\n");
+            receivedData = _stream.ReadLine();
         }
         for (int i = 0; i < 4 - number; i++) {
-            stream.Write("l " + i + " 0\r\n");
-            receivedData = stream.ReadLine();
+            _stream.Write("l " + i + " 0\r\n");
+            receivedData = _stream.ReadLine();
         }
     }
 
+    //needs a 4 character long string to set up the LED in this way
+    // 0 for turn off, 1 for turn 1, 2 for swap and 4 for blink
     public void setMultipleLED(string led) {
         for (int i = 0; i < 4; i++) {
             if (led[i] == '0' || led[i] == '1' || led[i] == '2') {
-                stream.Write("l " + i + " " + led[i] + "\r\n");
-                receivedData = stream.ReadLine();
+                _stream.Write("l " + (3 - i) + " " + led[i] + "\r\n");
+                receivedData = _stream.ReadLine();
             } else if (led[i] == '4') {
                 StartCoroutine(blinkLED(i));
             }
         }
     }
 
-    IEnumerator blinkLED(int id, int frequency = 2, int blinkCount = 10) {
+    //let the LED blink 
+    IEnumerator blinkLED(int id, int frequency = 5, int blinkCount = 20) {
         while (blinkCount > 0) {
-            stream.Write("l " + id + "2\r\n");
-            receivedData = stream.ReadLine();
+            _stream.Write("l " + (3 - id) + " 2\r\n");
+            receivedData = _stream.ReadLine();
             blinkCount--;
+            Debug.Log("test");
             yield return new WaitForSeconds(1.0f / frequency);
         }
     }
 
     public void setMotor(int value) {
-        stream.Write("m " + value + "\r\n");
-        receivedData = stream.ReadLine();
+        _stream.Write("m " + value + "\r\n");
+        receivedData = _stream.ReadLine();
     }
 }
