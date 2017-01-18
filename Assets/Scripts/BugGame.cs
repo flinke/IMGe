@@ -16,7 +16,7 @@ public class BugGame : MonoBehaviour
     void Start()
     {
         SetBumbleBeeArray(ParentBee);
-        SpawnBee();
+        Invoke("SpawnBee", 2f);
     }
 
     // Update is called once per frame
@@ -68,9 +68,11 @@ public class BugGame : MonoBehaviour
             beeNum = Random.Range(0, _beeArray.Length - 1);
             _isBeeUp[beeNum] = true;
             StartCoroutine(DespawnBee(beeNum));
-        } while (!_isBeeUp[beeNum]);
+        } while (_beeArray[beeNum].position.y > 0.2f);
         StartCoroutine(DespawnBee(beeNum));
+        Invoke("SpawnBee", Random.Range(1f, 3f));
     }
+
 
     // bling bling and reset bee
     IEnumerator BlinkBee(int beeNum)
@@ -93,7 +95,7 @@ public class BugGame : MonoBehaviour
         if (_isBeeUp[beeNum])
         {
             _isBeeUp[beeNum] = false;
-
+            _beeLow = 0f;
         }
     }
 
@@ -112,5 +114,6 @@ public class BugGame : MonoBehaviour
         }
     }
 
+    //Controller Skript ändern
 
 }
