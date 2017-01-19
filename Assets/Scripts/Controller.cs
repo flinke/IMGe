@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 public class Controller : MonoBehaviour {
-    SerialPort _stream = new SerialPort("COM8", 115200);
+    SerialPort _stream = new SerialPort("COM3", 115200);
     private string receivedData = "EMPTY";
     private string[] sliders = new string[5] { "test", "t", "tes", "ass", "df" };
     private string[] accelerometer;
@@ -13,6 +13,8 @@ public class Controller : MonoBehaviour {
     private float accelValsY;
     private float accelValsZ;
     private float alcoholLevel;
+    private int pressedLastFrame = -1;
+    
 
     void Start() {
         _stream.Open();
@@ -22,7 +24,6 @@ public class Controller : MonoBehaviour {
     }
 
     void Update() {
-        //setMultipleLED("0000");
     }
 
     //get the slide/rotate values
@@ -61,13 +62,26 @@ public class Controller : MonoBehaviour {
             accelValsZ -= 2.0f;
     }
 
+    // returns the pressed button
+    public int OnButtonClick() {
+        Debug.Log(pressedLastFrame);
+        for (int i = 0; i < 6; i++) {
+            if (isPressed(i) && pressedLastFrame != i) {
+                pressedLastFrame = i;
+                return i;
+            }
+        }
+        pressedLastFrame = -1;
+        return -1;
+    }
+
     //check if a button (1-6) is pressed 
     public bool isPressed(int button) {
         int receivedData;
         _stream.Write("1");
         receivedData = Convert.ToInt32(_stream.ReadLine(), 16);
 
-        int bitmask = 1 << (5 + button);
+        int bitmask = 1 << (6 + button);
         receivedData &= bitmask;
         return receivedData != 0;
     }
@@ -109,7 +123,6 @@ public class Controller : MonoBehaviour {
             _stream.Write("l " + (3 - id) + " 2\r\n");
             receivedData = _stream.ReadLine();
             blinkCount--;
-            Debug.Log("test");
             yield return new WaitForSeconds(1.0f / frequency);
         }
     }
