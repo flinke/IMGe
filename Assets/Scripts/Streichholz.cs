@@ -14,6 +14,8 @@ public class Streichholz : MonoBehaviour {
 		
 	}
 
+    //man registriert dass jetzt streichholz getan wird, indem ein boolean gesetzt wird bei einer oberklassemanager
+
     //controller vibiriert und neues spiel fängt an:
     // das streichholz fliegt hin
 
