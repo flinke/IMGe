@@ -4,17 +4,17 @@ using System;
 using System.Collections;
 
 public class Controller : MonoBehaviour {
-    SerialPort _stream = new SerialPort("COM3", 115200);
+    SerialPort _stream = new SerialPort("COM8", 115200);
     private string receivedData = "EMPTY";
     private string[] sliders = new string[5] { "test", "t", "tes", "ass", "df" };
     private string[] accelerometer;
-    private float[] sliderVals = new float[5] {1.0f,0f,0f,0f,0f};
+    private float[] sliderVals = new float[5] { 1.0f, 0f, 0f, 0f, 0f };
     private float accelValsX;
     private float accelValsY;
     private float accelValsZ;
     private float alcoholLevel;
     private int pressedLastFrame = -1;
-    
+
 
     void Start() {
         _stream.Open();
@@ -24,10 +24,12 @@ public class Controller : MonoBehaviour {
     }
 
     void Update() {
+        getAccel();
+        Debug.Log(accelValsX + " " + accelValsY + " " + accelValsZ);
     }
 
     //get the slide/rotate values
-    public float[]getSlider() {
+    public float[] getSlider() {
         _stream.Write("4");
         receivedData = _stream.ReadLine();
         sliders = receivedData.Split(' ');
@@ -42,7 +44,7 @@ public class Controller : MonoBehaviour {
     public float getAlcoholLevel() {
         _stream.Write("s");
         receivedData = _stream.ReadLine();
-        alcoholLevel = float.Parse( receivedData.Split(' ')[1], System.Globalization.CultureInfo.InvariantCulture);
+        alcoholLevel = float.Parse(receivedData.Split(' ')[1], System.Globalization.CultureInfo.InvariantCulture);
         return alcoholLevel;
     }
 
@@ -60,6 +62,11 @@ public class Controller : MonoBehaviour {
             accelValsY -= 2.0f;
         if (accelValsZ > 1.0f)
             accelValsZ -= 2.0f;
+    }
+
+    public float getAccelX() {
+        getAccel();
+        return accelValsX;
     }
 
     // returns the pressed button
