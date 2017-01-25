@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 public class Controller : MonoBehaviour {
-    SerialPort _stream = new SerialPort("COM8", 115200);
+    SerialPort _stream = new SerialPort("COM3", 115200);
     private string receivedData = "EMPTY";
     private string[] sliders = new string[5] { "test", "t", "tes", "ass", "df" };
     private string[] accelerometer;
@@ -15,7 +15,6 @@ public class Controller : MonoBehaviour {
     private float alcoholLevel;
     private int pressedLastFrame = -1;
 
-
     void Start() {
         _stream.Open();
         Debug.Log("Serial port opened");
@@ -25,13 +24,14 @@ public class Controller : MonoBehaviour {
 
     void Update() {
         getAccel();
-        Debug.Log(accelValsX + " " + accelValsY + " " + accelValsZ);
+        //Debug.Log(accelValsX + " " + accelValsY + " " + accelValsZ);
     }
 
-    //get the slide/rotate values
+    //get the slide/rotate values A: 
     public float[] getSlider() {
         _stream.Write("4");
         receivedData = _stream.ReadLine();
+        //Debug.Log( "slider: " + receivedData);
         sliders = receivedData.Split(' ');
         sliderVals[0] = (float)Convert.ToInt32(sliders[1], 16) / 4096;
         sliderVals[1] = (float)Convert.ToInt32(sliders[2], 16) / 4096;
