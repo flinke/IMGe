@@ -19,7 +19,8 @@ public class BugGame : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        killBee(GetComponent<Controller>().OnButtonClick() - 1);
+        if (GetComponent<Controller>().OnButtonClick() <= 0)
+            killBee(GetComponent<Controller>().OnButtonClick() - 1);
         for (int i = 0; i < _beeArray.Length; i++) {
 
             if (_isBeeUp[i] && _beeArray[i].transform.position.y < 0.47f) {
@@ -79,8 +80,8 @@ public class BugGame : MonoBehaviour {
     IEnumerator DespawnBee(int beeNum) {
         yield return new WaitForSeconds(5f);
         if (_isBeeUp[beeNum]) {
-            _isBeeUp[beeNum] = false;
             _beeLow = 0f;
+            _isBeeUp[beeNum] = false;
         }
     }
 
