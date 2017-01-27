@@ -10,6 +10,8 @@ public class Streichholz : MonoBehaviour
     private float velocity = 3;
     private float counter = 0;
     private float counterSlide = 0;
+    private Vector3 actualPosition = new Vector3(0, 0, 0);
+    private float w = 0;
 
     private float slideBefore = 0;
 
@@ -21,6 +23,14 @@ public class Streichholz : MonoBehaviour
         GetComponentInChildren<Renderer>().enabled = false;
         transform.GetChild(1).GetComponent<Renderer>().enabled = false;
         GetComponentInChildren<Renderer>().enabled = false;
+        StartMatchFly();
+        MatchFlyToWall();
+    }
+
+    public void StartMatchFly()
+    {
+        transform.GetChild(2).GetComponent<Renderer>().enabled = true;
+        transform.GetChild(3).GetComponent<Renderer>().enabled = true;
         MatchFlyToStartPosition();
     }
 
@@ -60,6 +70,12 @@ public class Streichholz : MonoBehaviour
             MoveMatch();
         }
 
+        if (w >= 1.0f)
+        {
+            MatchFlyToWall();
+        }
+
+
     }
 
     //man registriert dass jetzt streichholz getan wird, indem ein boolean gesetzt wird bei einer oberklassemanager
@@ -72,6 +88,28 @@ public class Streichholz : MonoBehaviour
         transform.GetComponentInParent<Animator>().SetBool("GameBegins", true);
         _counterBegins = true;
 
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        transform.GetChild(2).GetComponent<Renderer>().enabled = false;
+        transform.GetChild(3).GetComponent<Renderer>().enabled = false;
+        //transform.GetComponentInParent<Animator>().speed = -1;
+        transform.GetComponentInParent<Animator>().SetBool("MatchLitOn", false);
+
+        transform.GetComponentInParent<Animator>().SetBool("GameBegins", false);
+    }
+
+    public void MatchFlyToWall()
+    {
+        Debug.Log("hallo");
+
+        transform.GetComponentInParent<Animator>().SetBool("MatchLitOn", true);
+        Debug.Log(GetComponent<Renderer>().enabled);
+
+        //transform.GetComponentInParent<Animator>().speed = -1;
+        //transform.GetComponentInParent<Animator>().SetBool("MatchLitOn", false);
+        //transform.GetComponentInParent<Animator>().SetBool("GameBegins", false);
     }
 
     //Methode laesst streichholzschachtel hinfliegen
@@ -91,7 +129,7 @@ public class Streichholz : MonoBehaviour
         this.transform.localPosition = Vector3.Lerp(new Vector3(31.2f, -3.5f, 27.6f), new Vector3(30.8f, -3.6f, -0.9f), (sliderRight));
 
 
-        if (slideBefore + 0.07f < -sliderRight && counterSlide < counterSlide+Time.deltaTime)
+        if (slideBefore + 0.07f < -sliderRight && counterSlide < counterSlide + Time.deltaTime)
         {
             counterSlide += Time.deltaTime * 1.3f;
             Mathf.Clamp(counterSlide, 0, 1);
@@ -111,9 +149,20 @@ public class Streichholz : MonoBehaviour
 
         if (counterSlide >= 1.0f)
         {
+            if (actualPosition == new Vector3(0, 0, 0))
+            {
+                actualPosition = transform.localPosition;
+                w = slideBefore;
+            }
+
             Debug.Log(":)");
             transform.GetChild(1).GetComponent<Renderer>().enabled = false;
             GetComponentInChildren<Renderer>().enabled = true;
+            //Lerpe zum endpunkt
+            counterSlide = 20f;
+
+            this.transform.localPosition = Vector3.Lerp(actualPosition, new Vector3(31.2f, -3.5f, 27.6f), w);
+            w += Time.deltaTime;
         }
 
     }
@@ -127,4 +176,12 @@ public class Streichholz : MonoBehaviour
 
     //schachtel fliegt wieder zurück
 
+    //wenn in zehn sekunden nicht schafft -> bild wechselt -> bleibt beim Bild
+    //wie viele leben: 0=bluescreen. 3/4 Leben startet. 
+    //jede drei bis fünf bugs geht hoch
+    //actimel: gehts hoich, wenn trifft 
+
 }
+
+//0 bis 5 intensity hoch, wenn spiel beginnt 
+
