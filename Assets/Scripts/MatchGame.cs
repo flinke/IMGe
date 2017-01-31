@@ -12,6 +12,8 @@ public class MatchGame : MonoBehaviour
     private float counterSlide = 0;
     private Vector3 actualPosition = new Vector3(0, 0, 0);
     private float w = 0;
+    private bool _isPlaying = false;
+    private float time_gone;
 
     private float slideBefore = 0;
 
@@ -24,14 +26,16 @@ public class MatchGame : MonoBehaviour
         transform.GetChild(1).GetComponent<Renderer>().enabled = false;
         GetComponentInChildren<Renderer>().enabled = false;
         StartMatchFly();
-        MatchFlyToWall();
+        //MatchFlyToWall();
     }
 
     public void StartMatchFly()
     {
+        _isPlaying = true;
         transform.GetChild(2).GetComponent<Renderer>().enabled = true;
         transform.GetChild(3).GetComponent<Renderer>().enabled = true;
         MatchFlyToStartPosition();
+        time_gone = Time.time;
     }
 
     // Update is called once per frame
@@ -75,7 +79,17 @@ public class MatchGame : MonoBehaviour
             MatchFlyToWall();
         }
 
+        //Debug.Log(Time.time);
+        //Debug.Log("time_gione: " + time_gone);
 
+        if (_isPlaying && (Time.time-time_gone)>=6.0f)
+        {
+
+            Debug.Log("if");
+            _isPlaying = false;
+            GameObject.Find("LifeBar").GetComponent<LifeBar>().getDamage(1.0f);
+
+        }
     }
 
     //man registriert dass jetzt streichholz getan wird, indem ein boolean gesetzt wird bei einer oberklassemanager
@@ -106,7 +120,7 @@ public class MatchGame : MonoBehaviour
 
         transform.GetComponentInParent<Animator>().SetBool("MatchLitOn", true);
         Debug.Log(GetComponent<Renderer>().enabled);
-
+        _isPlaying = false;
         //transform.GetComponentInParent<Animator>().speed = -1;
         //transform.GetComponentInParent<Animator>().SetBool("MatchLitOn", false);
         //transform.GetComponentInParent<Animator>().SetBool("GameBegins", false);

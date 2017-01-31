@@ -16,6 +16,12 @@ public class LightOn : MonoBehaviour {
         transform.GetChild(1).GetComponent<Renderer>().enabled = true;
     }
 
+    public void LightsOff()
+    {
+        transform.GetChild(0).GetComponent<Renderer>().enabled = true;
+        transform.GetChild(1).GetComponent<Renderer>().enabled = true;
+    }
+
 	// Update is called once per frame
 	void Update () {
 		
