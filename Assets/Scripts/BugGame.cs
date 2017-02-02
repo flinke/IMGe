@@ -9,7 +9,7 @@ public class BugGame : MonoBehaviour {
     private Dictionary<int, bool> _isBeeUp;
     private float _beeHeight = 0f;
     private float _beeLow = 0f;
-
+    private bool clickedAButton;
 
     // Use this for initialization
     void Start() {
@@ -19,8 +19,11 @@ public class BugGame : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (GetComponent<Controller>().OnButtonClick() <= 0)
+        if (!clickedAButton && GetComponent<Controller>().isClicked()) {
             killBee(GetComponent<Controller>().OnButtonClick() - 1);
+            clickedAButton = true;
+        } else if (clickedAButton && !GetComponent<Controller>().isClicked())
+            clickedAButton = false;
         for (int i = 0; i < _beeArray.Length; i++) {
 
             if (_isBeeUp[i] && _beeArray[i].transform.position.y < 0.47f) {
@@ -46,7 +49,6 @@ public class BugGame : MonoBehaviour {
             _beeArray[i] = parentBee.transform.GetChild(i);
             _isBeeUp[i] = false;
         }
-
     }
 
     // spawn random bee
@@ -94,12 +96,19 @@ public class BugGame : MonoBehaviour {
             pressedButton = 0;
         if (_isBeeUp[pressedButton]) {
             StartCoroutine(BlinkBee(pressedButton));
-
         } else {
-            //HP--
+            GameObject.Find("LifeBar").GetComponent<LifeBar>().getDamage(1.0f);
         }
     }
 
-    //Controller Skript ändern
+    void OnDisable() {
+        for (int i = 0; i < _beeArray.Length; i++) {
+            _beeArray[i].transform.position = new Vector3(_beeArray[i].transform.position.x, 0.2f, _beeArray[i].transform.position.z);
+            _isBeeUp[i] = false;
+        }
+    }
 
+    void OnEnable() {
+        Start();
+    }
 }

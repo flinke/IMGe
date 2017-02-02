@@ -22,11 +22,6 @@ public class Controller : MonoBehaviour {
         setMultipleLED("0000");
     }
 
-    void Update() {
-        getAccel();
-        //Debug.Log(accelValsX + " " + accelValsY + " " + accelValsZ);
-    }
-
     //get the slide/rotate values A: 
     public float[] getSlider() {
         _stream.Write("4");
@@ -69,9 +64,15 @@ public class Controller : MonoBehaviour {
         return accelValsX;
     }
 
+    public bool isClicked() {
+        _stream.Write("1");
+        receivedData = _stream.ReadLine();
+        Debug.Log(receivedData != "0000002F");
+        return !(receivedData.Equals("0000002F"));
+    }
+
     // returns the pressed button
     public int OnButtonClick() {
-        Debug.Log(pressedLastFrame);
         for (int i = 0; i < 6; i++) {
             if (isPressed(i) && pressedLastFrame != i) {
                 pressedLastFrame = i;

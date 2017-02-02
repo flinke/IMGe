@@ -32,7 +32,6 @@ public class LifeBar : MonoBehaviour
 
     public void getDamage(float dmg)
     {
-        Debug.Log(hp);
         hp -= dmg;
     }
 }
